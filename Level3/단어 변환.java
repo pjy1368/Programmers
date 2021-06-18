@@ -1,25 +1,24 @@
-import java.util.Arrays;
 class Solution {
-    public static int ans = Integer.MAX_VALUE;
     
     public int solution(String begin, String target, String[] words) {
         final boolean[] visited = new boolean[words.length];
-        dfs(begin, target, words, visited, 1);
+        final int ans = dfs(begin, target, words, visited, 1, Integer.MAX_VALUE);
         return ans == Integer.MAX_VALUE ? 0 : ans;
     }
     
-    private void dfs(String begin, String target, String[] words, boolean[] visited, int cnt) {
+    private int dfs(String begin, String target, String[] words, boolean[] visited, int cnt, int ans) {
         if (begin.equals(target)) {
-            ans = Math.min(ans, cnt - 1);
+            return cnt - 1;
         }
 
         for (int i = 0; i < words.length; i++) {
             if (!visited[i] && onlyOneDifferentChar(begin, words[i])) {
                 visited[i] = true;
-                dfs(words[i], target, words, visited, cnt + 1);
+                ans = Math.min(ans, dfs(words[i], target, words, visited, cnt + 1, ans));
                 visited[i] = false;
             }
         }
+        return ans;
     }
 
     private boolean onlyOneDifferentChar(String a, String b) {
